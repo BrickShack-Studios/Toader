@@ -2,11 +2,11 @@ CC := gcc
 
 ifdef OS
 	CFLAGS := -Iinclude -Lbin -Llib -w -Wl,-subsystem,windows -Wall -Wextra -std=c99
-	LIBS := -lmingw32 -lSDL2main -lSDL2
+	LIBS := -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 	EXE := toader.exe
 else
 	CFLAGS := -g -Wall -Wextra -std=c99
-	LIBS := -lSDL2
+	LIBS := -lSDL2 -lSDL2_image
 	EXE := toader
 endif
 
