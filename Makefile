@@ -1,28 +1,45 @@
 CC := gcc
 
 ifdef OS
+	MKDIR := md
+	RMDIR := rd /S /Q
 	CFLAGS := -Iinclude -Lbin -Llib -w -Wl,-subsystem,windows -Wall -Wextra -std=c99
 	LIBS := -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
-	EXE := toader.exe
+	EXE := ./toader.exe
 else
-	CFLAGS := -g -Wall -Wextra -std=c99
+	MKDIR := mkdir
+	RMDIR := rm -rf
+	CFLAGS := -Iinclude -Wall -Wextra -std=c99
 	LIBS := -lSDL2 -lSDL2_image
-	EXE := toader
+	EXE := ./toader
 endif
 
 HEADERS :=
-SOURCES := main.c
+SOURCES := $(wildcard ./src/*.c)
 
-OBJECTS := $(SRCS:.c=.o)
+OBJECTS := $(patsubst ./src/%.c,./obj/%.o,$(SOURCES))
 
-build: ./src/$(SOURCES)
-	$(CC) ./src/$(SOURCES) $(CFLAGS) $(LIBS) -g -o $(EXE)
+.PHONY: all run clean
+
+all: $(EXE)
+
+$(EXE): $(OBJECTS) | ./binary
+	$(CC) $(LDFLAGS) $^ $(CFLAGS) $(LIBS) -g -o $@
+
+./obj/%.o: ./src/%.c | ./obj
+	$(CC) $(CFLAGS) -c $< -o $@
+
+./binary ./obj:
+	$(MKDIR) $@
 
 release: ./src/$(SOURCES)
 	$(CC) ./src/$(SOURCES) $(CFLAGS) $(LIBS) -Ofast -o $(EXE)
 
-run: build
-	./$(EXE)
+run: $(EXE)
+	./$<
+
+clean:
+	$(RMDIR) ./obj ./binary
 
 runRelease: release
-	./$(EXE)
+	$(EXE)

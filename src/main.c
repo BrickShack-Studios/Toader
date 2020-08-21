@@ -5,78 +5,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-// Pretty sure these are the right dimensions based on counting how many 8x8 tiles there were
-#define SCREEN_WIDTH 224
-#define SCREEN_HEIGHT 240
-
-typedef struct Screen
-{
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-    SDL_Texture* texture;
-    int width;
-    int height;
-} Screen;
-
-typedef struct Toad
-{
-    SDL_Texture* texture;
-    SDL_Rect* image;
-    int velX;
-    int velY;
-} Toad;
-
-Toad* newToad()
-{
-    // calloc() zeroes everything out, initializing it all for us
-    Toad* toad = calloc(1, sizeof(Toad));
-    return toad;
-}
-
-Screen* init()
-{
-    Screen* screen = malloc(sizeof(Screen));
-    screen->width = 224;
-    screen->height = 240;
-
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
-        printf("SDL Could not initialize. Error: %s\n", SDL_GetError());
-        free(screen);
-        goto end;
-    }
-
-    screen->window = SDL_CreateWindow("Toader", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screen->width, screen->height, SDL_WINDOW_SHOWN);
-    if (!screen->window)
-    {
-        printf("Window could not be created. Error: %s\n", SDL_GetError());
-        free(screen);
-        goto end;
-    }
-
-    screen->renderer = SDL_CreateRenderer(screen->window, -1, SDL_RENDERER_ACCELERATED);
-    if (!screen->renderer)
-    {
-        printf("Renderer could not be created. Error: %s\n", SDL_GetError());
-        SDL_DestroyWindow(screen->window);
-        free(screen);
-        goto end;
-    }
-
-    SDL_SetRenderDrawColor(screen->renderer, 0, 0, 0, 255);
-
-    int imgFlags = IMG_INIT_PNG;
-    if (!(IMG_Init(imgFlags) & imgFlags))
-    {
-        printf("SDL_Image could not initialize. Error: %s", IMG_GetError());
-        SDL_DestroyRenderer(screen->renderer);
-        SDL_DestroyWindow(screen->window);
-        free(screen);
-    }
-
-end:
-    return screen;
-}
+#include "toader.h"
+#include "screen.h"
 
 SDL_Texture* loadTexture(const char* path, Screen* screen)
 {
@@ -115,10 +45,8 @@ bool loadMedia(Toad* toad, Screen* screen)
         success = false;
     }
 
-    toad->image = calloc(1, sizeof(SDL_Rect*));
+    toad->image = calloc(1, sizeof(SDL_Rect));
 
-    toad->image->x = 0;
-    toad->image->y = 0;
     toad->image->w = 16;
     toad->image->h = 16;
 
@@ -209,9 +137,9 @@ void keyEvents(Toad* toad, SDL_Event e)
 
 void move(Toad* toad, Screen* screen)
 {
-    if (toad->image->x + toad->velX <= SCREEN_WIDTH && toad->image->x + toad->velX >= 0)
+    if (toad->image->x + toad->image->w + toad->velX <= screen->width && toad->image->x + toad->velX >= 0)
         toad->image->x += toad->velX;
-    if (toad->image->y + toad->velY <= SCREEN_HEIGHT && toad->image->y + toad->velY >= 0)
+    if (toad->image->y + toad->image->h + toad->velY <= screen->height && toad->image->y + toad->velY >= 0)
         toad->image->y += toad->velY;
     return;
 }
