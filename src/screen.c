@@ -6,6 +6,10 @@
 
 #include "screen.h"
 
+// TODO: figure out how C timers interact with SDL to get FPS capping working
+const int MAX_FPS = 60;
+const int TICKS_PER_FRAME = 1000 / MAX_FPS;
+
 Screen* init()
 {
     Screen* screen = malloc(sizeof(Screen));

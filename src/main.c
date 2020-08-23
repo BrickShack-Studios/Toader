@@ -7,60 +7,11 @@
 
 #include "toader.h"
 #include "screen.h"
-
-SDL_Texture* loadTexture(const char* path, Screen* screen)
-{
-    SDL_Texture* texture = NULL;
-
-    SDL_Surface* surface = IMG_Load(path);
-    if (!surface)
-    {
-        printf("Error loading %s. Error: %s\n", path, IMG_GetError());
-        goto end;
-    }
-
-    texture = SDL_CreateTextureFromSurface(screen->renderer, surface);
-    if (!texture)
-    {
-        printf("Error creating texture from %s. Error: %s\n", path, SDL_GetError());
-        goto end;
-    }
-
-end:
-
-    if (surface)
-        SDL_FreeSurface(surface);
-
-    return texture;
-}
-
-bool loadMedia(Toad* toad, Screen* screen)
-{
-    bool success = true;
-
-    toad->texture = loadTexture("res/sprites/toader/toader.png", screen);
-    if (!toad->texture)
-    {
-        printf("Unable to load %s. Error: %s\n", "res/sprites/toader/toader.png", SDL_GetError());
-        success = false;
-    }
-
-    toad->image = calloc(1, sizeof(SDL_Rect));
-
-    toad->image->w = 16;
-    toad->image->h = 16;
-
-    return success;
-}
+#include "sprite.h"
+#include "map.h"
 
 void cleanup(Screen* screen, Toad* toad)
 {
-    if (toad->texture)
-    {
-        SDL_DestroyTexture(toad->texture);
-        toad->texture = NULL;
-    }
-
     if (screen->window)
     {
         SDL_DestroyWindow(screen->window);
@@ -79,8 +30,10 @@ void cleanup(Screen* screen, Toad* toad)
         screen->texture = NULL;
     }
 
+    if (toad)
+	destroyToad(toad);
+
     free(screen);
-    free(toad);
     IMG_Quit();
     SDL_Quit();
     return;
@@ -137,27 +90,22 @@ void keyEvents(Toad* toad, SDL_Event e)
 
 void move(Toad* toad, Screen* screen)
 {
-    if (toad->image->x + toad->image->w + toad->velX <= screen->width && toad->image->x + toad->velX >= 0)
-        toad->image->x += toad->velX;
-    if (toad->image->y + toad->image->h + toad->velY <= screen->height && toad->image->y + toad->velY >= 0)
-        toad->image->y += toad->velY;
+    if (toad->sprite->rect->x + toad->sprite->rect->w + toad->velX <= screen->width && toad->sprite->rect->x + toad->velX >= 0)
+        toad->sprite->rect->x += toad->velX;
+    if (toad->sprite->rect->y + toad->sprite->rect->h + toad->velY <= screen->height && toad->sprite->rect->y + toad->velY >= 0)
+        toad->sprite->rect->y += toad->velY;
     return;
 }
 
 int main(int argc, char* argv[])
 {
     Screen* screen = init();
-    Toad* toad = newToad();
+    SpriteMap* worldMap = createWorldMap(screen);
+    Toad* toad = newToad(screen);
 
     if (!screen)
     {
         printf("Failed to initialize\n");
-        goto cleanup;
-    }
-
-    if (!loadMedia(toad, screen))
-    {
-        printf("Failed to load media\n");
         goto cleanup;
     }
 
@@ -178,11 +126,15 @@ int main(int argc, char* argv[])
         move(toad, screen);
 
         SDL_RenderClear(screen->renderer);
-        SDL_RenderCopy(screen->renderer, toad->texture, NULL, toad->image);
+
+	drawSpriteMap(worldMap, screen->renderer);
+        drawSprite(toad->sprite, screen->renderer);
+	
         SDL_RenderPresent(screen->renderer);
     }
 
 cleanup:
     cleanup(screen, toad);
+    destroySpriteMap(worldMap);
     return 0;
 }

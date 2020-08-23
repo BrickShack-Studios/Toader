@@ -27,7 +27,7 @@ $(EXE): $(OBJECTS) | ./binary
 	$(CC) $(LDFLAGS) $^ $(CFLAGS) $(LIBS) -g -o $@
 
 ./obj/%.o: ./src/%.c | ./obj
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -g -c $< -o $@
 
 ./binary ./obj:
 	$(MKDIR) $@
