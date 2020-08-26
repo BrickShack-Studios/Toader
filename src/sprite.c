@@ -14,14 +14,14 @@ SDL_Texture* loadTexture(const char* path, Screen* screen)
     SDL_Surface* surface = IMG_Load(path);
     if (!surface)
     {
-        printf("Error loading %s. Error: %s\n", path, IMG_GetError());
+        SDL_Log("Error loading %s. Error: %s\n", path, IMG_GetError());
         goto end;
     }
 
     texture = SDL_CreateTextureFromSurface(screen->renderer, surface);
     if (!texture)
     {
-        printf("Error creating texture from %s. Error: %s\n", path, SDL_GetError());
+        SDL_Log("Error creating texture from %s. Error: %s\n", path, SDL_GetError());
         goto end;
     }
 

@@ -57,7 +57,7 @@ Sprite* charToSprite(char c, Screen* screen)
 	    return NULL;
 	    break;
         default:
-	    printf("Error: Unknown sprite character code '%c'\n", c);
+	    SDL_Log("Error: Unknown sprite character code '%c'\n", c);
     }
 
     return NULL;
@@ -70,7 +70,7 @@ SpriteMap* newSpriteMapFromArray(const char** arr, int arrWidth, int arrHeight, 
     int x, y;
     for (y = 0; y < arrHeight; y++)
 	for (x = 0; x < arrWidth; x++)
-	{	    
+	{
 	    map->tile[y][x] = charToSprite(arr[y][x], screen);
 	    if (map->tile[y][x])
 	    {

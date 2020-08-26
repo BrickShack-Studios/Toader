@@ -5,10 +5,12 @@
 
 #include "sprite.h"
 #include "screen.h"
+#include "tween.h"
 
 typedef struct Toad
 {
     Sprite* sprite;
+    Tween* tween;
     int velX;
     int velY;
 } Toad;

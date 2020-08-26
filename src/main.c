@@ -9,6 +9,9 @@
 #include "screen.h"
 #include "sprite.h"
 #include "map.h"
+#include "tween.h"
+
+#include "macros.h"
 
 void cleanup(Screen* screen, Toad* toad)
 {
@@ -31,7 +34,7 @@ void cleanup(Screen* screen, Toad* toad)
     }
 
     if (toad)
-	destroyToad(toad);
+        destroyToad(toad);
 
     free(screen);
     IMG_Quit();
@@ -39,61 +42,41 @@ void cleanup(Screen* screen, Toad* toad)
     return;
 }
 
-void keyEvents(Toad* toad, SDL_Event e)
+bool inBounds(int x, int y)
 {
+    return ((x >= 0 && x <= 208) && (y >= 0 && y <= 224));
+}
+
+void move(Toad* toad, SDL_Event e)
+{
+    if (toad->tween->isActive)
+        return;
     if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
     {
         switch (e.key.keysym.sym)
         {
             case SDLK_w:
             case SDLK_UP:
-                toad->velY -= 1;
+                if (inBounds(toad->sprite->rect->x, toad->sprite->rect->y - 16))
+                    initTween(toad->tween, &toad->sprite->rect->y, normalizeTime(200), toad->sprite->rect->y, toad->sprite->rect->y - 16);
                 break;
             case SDLK_a:
             case SDLK_LEFT:
-                toad->velX -= 1;
+                if (inBounds(toad->sprite->rect->x - 16, toad->sprite->rect->y))
+                    initTween(toad->tween, &toad->sprite->rect->x, normalizeTime(200), toad->sprite->rect->x, toad->sprite->rect->x - 16);
                 break;
             case SDLK_s:
             case SDLK_DOWN:
-                toad->velY += 1;
+                if (inBounds(toad->sprite->rect->x, toad->sprite->rect->y + 16))
+                    initTween(toad->tween, &toad->sprite->rect->y, normalizeTime(200), toad->sprite->rect->y, toad->sprite->rect->y + 16);
                 break;
             case SDLK_d:
             case SDLK_RIGHT:
-                toad->velX += 1;
+                if (inBounds(toad->sprite->rect->x + 16, toad->sprite->rect->y))
+                    initTween(toad->tween, &toad->sprite->rect->x, normalizeTime(200), toad->sprite->rect->x, toad->sprite->rect->x + 16);
                 break;
         }
     }
-    else if (e.type == SDL_KEYUP && e.key.repeat == 0)
-    {
-        switch (e.key.keysym.sym)
-        {
-            case SDLK_w:
-            case SDLK_UP:
-                toad->velY += 1;
-                break;
-            case SDLK_a:
-            case SDLK_LEFT:
-                toad->velX += 1;
-                break;
-            case SDLK_s:
-            case SDLK_DOWN:
-                toad->velY -= 1;
-                break;
-            case SDLK_d:
-            case SDLK_RIGHT:
-                toad->velX -= 1;
-                break;
-        }
-    }
-    return;
-}
-
-void move(Toad* toad, Screen* screen)
-{
-    if (toad->sprite->rect->x + toad->sprite->rect->w + toad->velX <= screen->width && toad->sprite->rect->x + toad->velX >= 0)
-        toad->sprite->rect->x += toad->velX;
-    if (toad->sprite->rect->y + toad->sprite->rect->h + toad->velY <= screen->height && toad->sprite->rect->y + toad->velY >= 0)
-        toad->sprite->rect->y += toad->velY;
     return;
 }
 
@@ -105,7 +88,7 @@ int main(int argc, char* argv[])
 
     if (!screen)
     {
-        printf("Failed to initialize\n");
+        SDL_Log("Failed to initialize\n");
         goto cleanup;
     }
 
@@ -120,16 +103,15 @@ int main(int argc, char* argv[])
             if(e.type == SDL_QUIT)
                 quit = true;
 
-            keyEvents(toad, e);
+            move(toad, e);
         }
-
-        move(toad, screen);
-
+	tickTween(toad->tween);
+	
         SDL_RenderClear(screen->renderer);
 
-	drawSpriteMap(worldMap, screen->renderer);
+        drawSpriteMap(worldMap, screen->renderer);
         drawSprite(toad->sprite, screen->renderer);
-	
+
         SDL_RenderPresent(screen->renderer);
     }
 

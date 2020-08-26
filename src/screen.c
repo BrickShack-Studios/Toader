@@ -7,8 +7,8 @@
 #include "screen.h"
 
 // TODO: figure out how C timers interact with SDL to get FPS capping working
-const int MAX_FPS = 60;
-const int TICKS_PER_FRAME = 1000 / MAX_FPS;
+//const int MAX_FPS = 60;
+//const int TICKS_PER_FRAME = 1000;
 
 Screen* init()
 {
@@ -18,7 +18,7 @@ Screen* init()
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
-        printf("SDL Could not initialize. Error: %s\n", SDL_GetError());
+        SDL_Log("SDL Could not initialize. Error: %s\n", SDL_GetError());
         free(screen);
         goto end;
     }
@@ -26,7 +26,7 @@ Screen* init()
     screen->window = SDL_CreateWindow("Toader", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screen->width, screen->height, SDL_WINDOW_SHOWN);
     if (!screen->window)
     {
-        printf("Window could not be created. Error: %s\n", SDL_GetError());
+        SDL_Log("Window could not be created. Error: %s\n", SDL_GetError());
         free(screen);
         goto end;
     }
@@ -34,7 +34,7 @@ Screen* init()
     screen->renderer = SDL_CreateRenderer(screen->window, -1, SDL_RENDERER_ACCELERATED);
     if (!screen->renderer)
     {
-        printf("Renderer could not be created. Error: %s\n", SDL_GetError());
+        SDL_Log("Renderer could not be created. Error: %s\n", SDL_GetError());
         SDL_DestroyWindow(screen->window);
         free(screen);
         goto end;
@@ -45,7 +45,7 @@ Screen* init()
     int imgFlags = IMG_INIT_PNG;
     if (!(IMG_Init(imgFlags) & imgFlags))
     {
-        printf("SDL_Image could not initialize. Error: %s", IMG_GetError());
+        SDL_Log("SDL_Image could not initialize. Error: %s", IMG_GetError());
         SDL_DestroyRenderer(screen->renderer);
         SDL_DestroyWindow(screen->window);
         free(screen);
