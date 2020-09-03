@@ -53,17 +53,16 @@ void destroySprite(Sprite* sprite)
 {
     if (sprite->texture)
     {
-	SDL_DestroyTexture(sprite->texture);
-	sprite->texture = NULL;
+        SDL_DestroyTexture(sprite->texture);
+        sprite->texture = NULL;
     }
 
     if (sprite->rect)
     {
         free(sprite->rect);
-	sprite->rect = NULL;
+        sprite->rect = NULL;
     }
 
     free(sprite);
-
     return;
 }

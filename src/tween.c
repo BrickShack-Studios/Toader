@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+#include "screen.h"
 #include "tween.h"
 
 Tween* newTween()
@@ -45,6 +46,5 @@ bool tickTween(Tween *tween)
 void destroyTween(Tween *tween)
 {
     free(tween);
-
     return;
 }
