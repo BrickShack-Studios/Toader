@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
 
 #include "screen.h"
 
@@ -19,6 +20,7 @@ Screen* init()
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
         SDL_Log("SDL Could not initialize. Error: %s\n", SDL_GetError());
+        SDL_DestroyWindow(screen->window);
         free(screen);
         goto end;
     }
@@ -27,6 +29,7 @@ Screen* init()
     if (!screen->window)
     {
         SDL_Log("Window could not be created. Error: %s\n", SDL_GetError());
+        SDL_DestroyWindow(screen->window);
         free(screen);
         goto end;
     }
@@ -46,6 +49,14 @@ Screen* init()
     if (!(IMG_Init(imgFlags) & imgFlags))
     {
         SDL_Log("SDL_Image could not initialize. Error: %s", IMG_GetError());
+        SDL_DestroyRenderer(screen->renderer);
+        SDL_DestroyWindow(screen->window);
+        free(screen);
+    }
+
+    if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
+    {
+        SDL_Log("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
         SDL_DestroyRenderer(screen->renderer);
         SDL_DestroyWindow(screen->window);
         free(screen);

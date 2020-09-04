@@ -4,13 +4,13 @@ ifdef OS
 	MKDIR := md
 	RMDIR := rd /S /Q
 	CFLAGS := -Iinclude -Lbin -Llib -w -Wl,-subsystem,windows -Wall -Wextra -std=c99
-	LIBS := -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
+	LIBS := -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer
 	EXE := ./toader.exe
 else
 	MKDIR := mkdir
 	RMDIR := rm -rf
 	CFLAGS := -Iinclude -Wall -Wextra -std=c99
-	LIBS := -lSDL2 -lSDL2_image
+	LIBS := -lSDL2 -lSDL2_image -lSDL2_mixer
 	EXE := ./toader
 endif
 

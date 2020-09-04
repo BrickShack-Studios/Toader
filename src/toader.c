@@ -14,9 +14,12 @@ Toad* newToad(Screen* screen)
     Toad* toad = calloc(1, sizeof(Toad));
     toad->rect = calloc(1, sizeof(SDL_Rect));
     toad->tween = newTween();
+    toad->soundMap = newSoundMap(4);
 
     toad->rect->h = 16;
     toad->rect->w = 16;
+
+    addToaderSound(toad);
     addToaderAnimation(screen, toad);
     return toad;
 }
@@ -27,8 +30,11 @@ void destroyToad(Toad* toad)
         destroyAnimationMap(toad->animationMap);
     if (toad->tween)
         destroyTween(toad->tween);
+    if (toad->soundMap)
+        destroySoundMap(toad->soundMap);
 
     toad->animationMap = NULL;
+    toad->soundMap = NULL;
     toad->tween = NULL;
     free(toad);
     return;
@@ -41,5 +47,14 @@ void addToaderAnimation(Screen* screen, Toad* toad)
     toad->animationMap->animations[1] = newAnimation(screen, "./res/sprites/toader/toaderDownAnimation.PNG\0", 2, 16, 16, 250);
     toad->animationMap->animations[2] = newAnimation(screen, "./res/sprites/toader/toaderLeftAnimation.PNG\0", 2, 16, 16, 250);
     toad->animationMap->animations[3] = newAnimation(screen, "./res/sprites/toader/toaderRightAnimation.PNG\0", 2, 16, 16, 250);
+    return;
+}
+
+void addToaderSound(Toad* toad)
+{
+    toad->soundMap->sounds[0] = Mix_LoadWAV("./res/sound/hop.wav");
+    toad->soundMap->sounds[1] = Mix_LoadWAV("./res/sound/lifeup.wav");
+    toad->soundMap->sounds[2] = Mix_LoadWAV("./res/sound/splat.wav");
+    toad->soundMap->sounds[3] = Mix_LoadWAV("./res/sound/splash.wav");
     return;
 }

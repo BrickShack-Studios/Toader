@@ -4,6 +4,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
 
 #include "animation.h"
 #include "map.h"
@@ -38,6 +39,7 @@ void cleanup(Screen* screen, Toad* toad)
 
     free(screen);
     IMG_Quit();
+    Mix_Quit();
     SDL_Quit();
     return;
 }
@@ -60,6 +62,7 @@ void move(Screen* screen, Toad* toad, SDL_Event e)
             case SDLK_UP:
                 if (inBounds(toad->rect->x, toad->rect->y - 16))
                 {
+                    Mix_PlayChannel(-1, toad->soundMap->sounds[HOP], 0);
                     initTween(toad->tween, &toad->rect->y, 500, toad->rect->y, toad->rect->y - 16);
                     setAnimation(toad->animationMap, JUMP_UP);
                 }
@@ -68,6 +71,7 @@ void move(Screen* screen, Toad* toad, SDL_Event e)
             case SDLK_LEFT:
                 if (inBounds(toad->rect->x - 16, toad->rect->y))
                 {
+                    Mix_PlayChannel(-1, toad->soundMap->sounds[HOP], 0);
                     initTween(toad->tween, &toad->rect->x, 500, toad->rect->x, toad->rect->x - 16);
                     setAnimation(toad->animationMap, JUMP_LEFT);
                 }
@@ -76,6 +80,7 @@ void move(Screen* screen, Toad* toad, SDL_Event e)
             case SDLK_DOWN:
                 if (inBounds(toad->rect->x, toad->rect->y + 16))
                 {
+                    Mix_PlayChannel(-1, toad->soundMap->sounds[HOP], 0);
                     initTween(toad->tween, &toad->rect->y, 500, toad->rect->y, toad->rect->y + 16);
                     setAnimation(toad->animationMap, JUMP_DOWN);
                 }
@@ -84,6 +89,7 @@ void move(Screen* screen, Toad* toad, SDL_Event e)
             case SDLK_RIGHT:
                 if (inBounds(toad->rect->x + 16, toad->rect->y))
                 {
+                    Mix_PlayChannel(-1, toad->soundMap->sounds[HOP], 0);
                     initTween(toad->tween, &toad->rect->x, 500, toad->rect->x, toad->rect->x + 16);
                     setAnimation(toad->animationMap, JUMP_RIGHT);
                 }

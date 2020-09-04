@@ -2,11 +2,13 @@
 #define TOADER_H
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 
 #include "animationmap.h"
 #include "animation.h"
 #include "sprite.h"
 #include "screen.h"
+#include "soundmap.h"
 #include "tween.h"
 
 enum ToadAnimation
@@ -17,13 +19,22 @@ enum ToadAnimation
   JUMP_RIGHT
 };
 
+enum ToadSound
+{
+    HOP,
+    LIFEUP,
+    SPLAT,
+    SPLASH
+};
+
 typedef struct Toad
 {
     AnimationMap* animationMap;
     Tween* tween;
     SDL_Rect* rect;
-    int numAnimations;
-    enum ToadAnimation state;
+    SoundMap* soundMap;
+    enum ToadSound soundState;
+    enum ToadAnimation animationState;
 } Toad;
 
 /**
@@ -41,5 +52,11 @@ void destroyToad(Toad* toad);
 */
 
 void addToaderAnimation(Screen* screen, Toad* toad);
+
+/**
+   Adds sounds to a Toad's SoundMap
+*/
+
+void addToaderSound(Toad* toad);
 
 #endif
