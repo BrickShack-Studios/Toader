@@ -10,10 +10,10 @@ Tween* newTween()
     return tween;
 }
 
-void initTween(Tween *tween, int *value, clock_t duration, int startValue, int endValue)
+void initTween(Tween *tween, int *value, unsigned int duration, int startValue, int endValue)
 {
     tween->value = value;
-    tween->startTime = clock();
+    tween->startTime = SDL_GetTicks();
     tween->endTime = tween->startTime + duration;
     tween->startValue = startValue;
     tween->endValue = endValue;
@@ -31,7 +31,7 @@ bool tickTween(Tween *tween)
     if (!tween->isActive)
         return false;
 
-    clock_t time = clock();
+    unsigned int time = SDL_GetTicks();
     if (time >= tween->endTime)
     {
         *(tween->value) = tween->endValue;
