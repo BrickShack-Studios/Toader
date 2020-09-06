@@ -1,12 +1,14 @@
-#include "soundmap.h"
+#include <stdlib.h>
 
-#include <stdio.h>
+#include "soundmap.h"
 
 SoundMap* newSoundMap(int numSounds)
 {
     SoundMap* soundMap = calloc(1, sizeof(SoundMap*));
     soundMap->sounds = calloc(numSounds, sizeof(Mix_Chunk*));
     soundMap->numSounds = numSounds;
+
+    return soundMap;
 }
 
 void destroySoundMap(SoundMap* soundMap)

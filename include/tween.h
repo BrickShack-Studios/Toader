@@ -3,14 +3,13 @@
 
 #include <SDL2/SDL.h>
 
-#include <time.h>
 #include <stdbool.h>
 
 typedef struct Tween
 {
   int* value;
-  clock_t startTime;
-  clock_t endTime;
+  unsigned int startTime;
+  unsigned int endTime;
   int startValue;
   int endValue;
   bool isActive;
@@ -26,7 +25,7 @@ Tween *newTween();
    Initializes a passed Tween struct with the parameters provided
 */
 
-void initTween(Tween *tween, int* value, clock_t duration, int startValue, int endValue);
+void initTween(Tween *tween, int* value, unsigned int duration, int startValue, int endValue);
 
 /**
    Determines if a tween is still in progress. If it is, it performs a little step of the tween based on how much time remains.

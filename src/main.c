@@ -12,7 +12,9 @@
 #include "sprite.h"
 #include "toader.h"
 #include "tween.h"
-#include "macros.h"
+
+// TODO: Figure out why this needs to be 30 for 60 FPS instead of 60
+const unsigned int MILLISECONDS_PER_FRAME = 1000 / 30;
 
 void cleanup(Screen* screen, Toad* toad)
 {
@@ -49,7 +51,7 @@ bool inBounds(int x, int y)
     return ((x >= 0 && x <= 208) && (y >= 0 && y <= 224));
 }
 
-void move(Screen* screen, Toad* toad, SDL_Event e)
+void move(Toad* toad, SDL_Event e)
 {
     if (toad->tween->isActive)
         return;
@@ -114,6 +116,11 @@ int main(int argc, char* argv[])
     bool quit = false;
     SDL_Event e;
 
+    int frameCount = 0;
+    unsigned int currentTime = SDL_GetTicks();
+    unsigned int lastFrame = currentTime;
+    unsigned int lastPrint = currentTime;
+    
     while (!quit)
     {
         while(SDL_PollEvent(&e))
@@ -122,7 +129,7 @@ int main(int argc, char* argv[])
             if(e.type == SDL_QUIT)
                 quit = true;
 
-            move(screen, toad, e);
+            move(toad, e);
         }
         tickTween(toad->tween);
 
@@ -133,10 +140,25 @@ int main(int argc, char* argv[])
         drawAnimationMap(toad->animationMap, screen->renderer, toad->rect);
 
         SDL_RenderPresent(screen->renderer);
+
+        frameCount++;
+        currentTime = SDL_GetTicks();
+        if (currentTime - lastFrame < MILLISECONDS_PER_FRAME)
+            SDL_Delay(MILLISECONDS_PER_FRAME - (currentTime - lastFrame));
+        
+        lastFrame = currentTime;
+        if (currentTime - lastPrint >= 1000)
+        {
+            SDL_Log("FPS: %u\n", frameCount);
+            frameCount = 0;
+            lastPrint = currentTime;
+        }
     }
 
 cleanup:
     cleanup(screen, toad);
     destroySpriteMap(worldMap);
+
+    argv[argc - 1][0] = 0; // Does nothing except cheekily remove warnings
     return 0;
 }
