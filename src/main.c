@@ -13,8 +13,7 @@
 #include "toader.h"
 #include "tween.h"
 
-// TODO: Figure out why this needs to be 30 for 60 FPS instead of 60
-const unsigned int MILLISECONDS_PER_FRAME = 1000 / 30;
+const unsigned int MILLISECONDS_PER_FRAME = 1000 / 60;
 
 void cleanup(Screen* screen, Toad* toad)
 {
@@ -116,7 +115,7 @@ int main(int argc, char* argv[])
     bool quit = false;
     SDL_Event e;
 
-    int frameCount = 0;
+    unsigned int frameCount = 0;
     unsigned int currentTime = SDL_GetTicks();
     unsigned int lastFrame = currentTime;
     unsigned int lastPrint = currentTime;
@@ -142,17 +141,19 @@ int main(int argc, char* argv[])
         SDL_RenderPresent(screen->renderer);
 
         frameCount++;
+        
         currentTime = SDL_GetTicks();
         if (currentTime - lastFrame < MILLISECONDS_PER_FRAME)
             SDL_Delay(MILLISECONDS_PER_FRAME - (currentTime - lastFrame));
         
-        lastFrame = currentTime;
         if (currentTime - lastPrint >= 1000)
         {
             SDL_Log("FPS: %u\n", frameCount);
             frameCount = 0;
             lastPrint = currentTime;
         }
+
+        lastFrame = currentTime;
     }
 
 cleanup:
