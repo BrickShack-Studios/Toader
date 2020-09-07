@@ -141,11 +141,12 @@ int main(int argc, char* argv[])
         SDL_RenderPresent(screen->renderer);
 
         frameCount++;
-        
+
         currentTime = SDL_GetTicks();
         if (currentTime - lastFrame < MILLISECONDS_PER_FRAME)
             SDL_Delay(MILLISECONDS_PER_FRAME - (currentTime - lastFrame));
         
+        lastFrame = currentTime;
         if (currentTime - lastPrint >= 1000)
         {
             SDL_Log("FPS: %u\n", frameCount);
