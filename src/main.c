@@ -7,11 +7,12 @@
 #include <SDL2/SDL_mixer.h>
 
 #include "animation.h"
-#include "map.h"
+#include "spritemap.h"
 #include "screen.h"
 #include "sprite.h"
 #include "toader.h"
 #include "tween.h"
+#include "text.h"
 
 const unsigned int MILLISECONDS_PER_FRAME = 1000 / 60;
 
@@ -103,8 +104,8 @@ void move(Toad* toad, SDL_Event e)
 int main(int argc, char* argv[])
 {
     Screen* screen = init();
-    SpriteMap* worldMap = createWorldMap(screen);
-    Toad* toad = newToad(screen);
+    SpriteMap* worldMap = createWorldMap(screen->renderer);
+    Toad* toad = newToad(screen->renderer);
 
     if (!screen)
     {
@@ -114,6 +115,9 @@ int main(int argc, char* argv[])
 
     bool quit = false;
     SDL_Event e;
+
+    Text* nut = newText(screen->renderer, "nut", 6, 9);
+
 
     unsigned int frameCount = 0;
     unsigned int currentTime = SDL_GetTicks();
@@ -130,6 +134,7 @@ int main(int argc, char* argv[])
 
             move(toad, e);
         }
+
         tickTween(toad->tween);
 
         SDL_RenderClear(screen->renderer);
@@ -137,6 +142,8 @@ int main(int argc, char* argv[])
         drawSpriteMap(worldMap, screen->renderer);
 
         drawAnimationMap(toad->animationMap, screen->renderer, toad->rect);
+
+        drawText(nut, screen->renderer);
 
         SDL_RenderPresent(screen->renderer);
 
@@ -158,6 +165,7 @@ int main(int argc, char* argv[])
     }
 
 cleanup:
+    destroyText(nut);
     cleanup(screen, toad);
     destroySpriteMap(worldMap);
 

@@ -40,7 +40,7 @@ typedef struct Toad
 /**
    Allocates a new Toad struct using the renderer provided by the Screen
  */
-Toad* newToad(Screen* screen);
+Toad* newToad(SDL_Renderer* renderer);
 
 /**
    Frees all memory taken up by the Toad struct and its members
@@ -51,7 +51,7 @@ void destroyToad(Toad* toad);
    Adds animations to a Toad's AnimationMap
 */
 
-void addToaderAnimation(Screen* screen, Toad* toad);
+void addToaderAnimation(SDL_Renderer* renderer, Toad* toad);
 
 /**
    Adds sounds to a Toad's SoundMap

@@ -1,8 +1,8 @@
-#include "animation.h"
-
 #include <stdlib.h>
 
-Animation* newAnimation(Screen* screen, const char* spriteFilePath, int frames, int height, int width, clock_t duration)
+#include "animation.h"
+
+Animation* newAnimation(SDL_Renderer* renderer, const char* spriteFilePath, int frames, int height, int width, clock_t duration)
 {
     Animation* animation = calloc(1, sizeof(Animation));
     animation->currentFrame = calloc(1, sizeof(SDL_Rect));
@@ -15,7 +15,7 @@ Animation* newAnimation(Screen* screen, const char* spriteFilePath, int frames, 
     animation->duration = duration;
     animation->frameCount = frames;
     animation->frame = 0;
-    animation->strip = newSprite(spriteFilePath, screen);
+    animation->strip = newSprite(spriteFilePath, renderer);
     animation->tween = newTween();
     return animation;
 }

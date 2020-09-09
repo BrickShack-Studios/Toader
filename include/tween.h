@@ -1,9 +1,9 @@
 #ifndef TWEEN_H
 #define TWEEN_H
 
-#include <SDL2/SDL.h>
-
 #include <stdbool.h>
+
+#include <SDL2/SDL.h>
 
 typedef struct Tween
 {

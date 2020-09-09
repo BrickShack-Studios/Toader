@@ -10,6 +10,7 @@ extern const char* WORLD[15];
 typedef struct SpriteMap
 {
     Sprite*** tile;
+    SDL_Rect* rect;
     int height;
     int width;
     int tileHeight;
@@ -29,23 +30,23 @@ SpriteMap* newSpriteMap(int width, int height, int tileWidth, int tileHeight);
 /**
    Creates a new SpriteMap* and fills it with sprites by parsing a 2D char array
  */
-SpriteMap* newSpriteMapFromArray(const char** arr, int arrWidth, int arrHeight, int tileWidth, int tileHeight, Screen* screen);
+SpriteMap* newSpriteMapFromArray(const char** arr, int arrWidth, int arrHeight, int tileWidth, int tileHeight, SDL_Renderer* renderer);
 
 /**
    Creates the gameplay area specifically
  */
-SpriteMap* createWorldMap(Screen* screen);
+SpriteMap* createWorldMap(SDL_Renderer* renderer);
 
 /**
    Batch draws every sprite in the sprite map with one call
  */
-void drawSpriteMap(SpriteMap* map, SDL_Renderer* renderer);
+void drawSpriteMap(SpriteMap* spriteMap, SDL_Renderer* renderer);
 
 /**
    Frees all memory associated with the sprite map
 
    \warning This includes all `Sprite*`s
  */
-void destroySpriteMap(SpriteMap* map);
+void destroySpriteMap(SpriteMap* spriteMap);
 
 #endif

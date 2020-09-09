@@ -1,13 +1,13 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
+#include <time.h>
+
 #include <SDL2/SDL.h>
 
 #include "screen.h"
 #include "sprite.h"
 #include "tween.h"
-
-#include <time.h>
 
 typedef struct Animation
 {
@@ -23,7 +23,7 @@ typedef struct Animation
    Allocates a new Animation using the provided parameters
 */
 
-Animation* newAnimation(Screen* screen, const char* spriteFilePath, int frames, int height, int width, clock_t duration);
+Animation* newAnimation(SDL_Renderer* renderer, const char* spriteFilePath, int frames, int height, int width, clock_t duration);
 
 /**
    Draws an Animation from an AnimationMap to the screen

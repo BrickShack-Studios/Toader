@@ -18,13 +18,13 @@ the image into an SDL_Texture* from disk.
 
    \note The image must be a PNG due to flags set with the SDL_image library
  */
-SDL_Texture* loadTexture(const char* path, Screen* screen);
+SDL_Texture* loadTexture(const char* path, SDL_Renderer* renderer);
 
 /**
    Allocates all memory required to load a Sprite* from a path to an image, and
 then loads it
  */
-Sprite* newSprite(const char* path, Screen* screen);
+Sprite* newSprite(const char* path, SDL_Renderer* renderer);
 
 /**
    A convenience function which handles drawing a Sprite at its location

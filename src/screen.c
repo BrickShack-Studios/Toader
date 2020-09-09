@@ -52,6 +52,7 @@ Screen* init()
         SDL_DestroyRenderer(screen->renderer);
         SDL_DestroyWindow(screen->window);
         free(screen);
+        goto end;
     }
 
     if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
@@ -60,6 +61,7 @@ Screen* init()
         SDL_DestroyRenderer(screen->renderer);
         SDL_DestroyWindow(screen->window);
         free(screen);
+        goto end;
     }
 
 end:

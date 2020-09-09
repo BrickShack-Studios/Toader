@@ -8,7 +8,7 @@
 #include "sprite.h"
 #include "toader.h"
 
-Toad* newToad(Screen* screen)
+Toad* newToad(SDL_Renderer* renderer)
 {
     // calloc() zeroes everything out, initializing it all for us
     Toad* toad = calloc(1, sizeof(Toad));
@@ -20,7 +20,7 @@ Toad* newToad(Screen* screen)
     toad->rect->w = 16;
 
     addToaderSound(toad);
-    addToaderAnimation(screen, toad);
+    addToaderAnimation(renderer, toad);
     return toad;
 }
 
@@ -40,13 +40,13 @@ void destroyToad(Toad* toad)
     return;
 }
 
-void addToaderAnimation(Screen* screen, Toad* toad)
+void addToaderAnimation(SDL_Renderer* renderer, Toad* toad)
 {
     toad->animationMap = newAnimationMap(4);
-    toad->animationMap->animations[0] = newAnimation(screen, "./res/sprites/toader/toaderUpAnimation.PNG\0", 2, 16, 16, 250);
-    toad->animationMap->animations[1] = newAnimation(screen, "./res/sprites/toader/toaderDownAnimation.PNG\0", 2, 16, 16, 250);
-    toad->animationMap->animations[2] = newAnimation(screen, "./res/sprites/toader/toaderLeftAnimation.PNG\0", 2, 16, 16, 250);
-    toad->animationMap->animations[3] = newAnimation(screen, "./res/sprites/toader/toaderRightAnimation.PNG\0", 2, 16, 16, 250);
+    toad->animationMap->animations[0] = newAnimation(renderer, "./res/sprites/toader/toaderUpAnimation.PNG\0", 2, 16, 16, 250);
+    toad->animationMap->animations[1] = newAnimation(renderer, "./res/sprites/toader/toaderDownAnimation.PNG\0", 2, 16, 16, 250);
+    toad->animationMap->animations[2] = newAnimation(renderer, "./res/sprites/toader/toaderLeftAnimation.PNG\0", 2, 16, 16, 250);
+    toad->animationMap->animations[3] = newAnimation(renderer, "./res/sprites/toader/toaderRightAnimation.PNG\0", 2, 16, 16, 250);
     return;
 }
 

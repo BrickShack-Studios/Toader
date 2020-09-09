@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "animationmap.h"
 #include "animation.h"
 

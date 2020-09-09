@@ -7,7 +7,7 @@
 #include "screen.h"
 #include "sprite.h"
 
-SDL_Texture* loadTexture(const char* path, Screen* screen)
+SDL_Texture* loadTexture(const char* path, SDL_Renderer* renderer)
 {
     SDL_Texture* texture = NULL;
 
@@ -18,7 +18,7 @@ SDL_Texture* loadTexture(const char* path, Screen* screen)
         goto end;
     }
 
-    texture = SDL_CreateTextureFromSurface(screen->renderer, surface);
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
     if (!texture)
     {
         SDL_Log("Error creating texture from %s. Error: %s\n", path, SDL_GetError());
@@ -33,11 +33,11 @@ end:
     return texture;
 }
 
-Sprite* newSprite(const char* path, Screen* screen)
+Sprite* newSprite(const char* path, SDL_Renderer* renderer)
 {
     Sprite* sprite = calloc(1, sizeof(Sprite));
 
-    sprite->texture = loadTexture(path, screen);
+    sprite->texture = loadTexture(path, renderer);
     sprite->rect = calloc(1, sizeof(SDL_Rect));
 
     return sprite;
