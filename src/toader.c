@@ -43,10 +43,10 @@ void destroyToad(Toad* toad)
 void addToaderAnimation(SDL_Renderer* renderer, Toad* toad)
 {
     toad->animationMap = newAnimationMap(4);
-    toad->animationMap->animations[0] = newAnimation(renderer, "./res/sprites/toader/toaderUpAnimation.PNG\0", 2, 16, 16, 250);
-    toad->animationMap->animations[1] = newAnimation(renderer, "./res/sprites/toader/toaderDownAnimation.PNG\0", 2, 16, 16, 250);
-    toad->animationMap->animations[2] = newAnimation(renderer, "./res/sprites/toader/toaderLeftAnimation.PNG\0", 2, 16, 16, 250);
-    toad->animationMap->animations[3] = newAnimation(renderer, "./res/sprites/toader/toaderRightAnimation.PNG\0", 2, 16, 16, 250);
+    toad->animationMap->animations[0] = newAnimation(renderer, "./res/sprites/toader/toaderUpAnimation.PNG\0", 2, 16, 16, 200);
+    toad->animationMap->animations[1] = newAnimation(renderer, "./res/sprites/toader/toaderDownAnimation.PNG\0", 2, 16, 16, 200);
+    toad->animationMap->animations[2] = newAnimation(renderer, "./res/sprites/toader/toaderLeftAnimation.PNG\0", 2, 16, 16, 200);
+    toad->animationMap->animations[3] = newAnimation(renderer, "./res/sprites/toader/toaderRightAnimation.PNG\0", 2, 16, 16, 200);
     return;
 }
 

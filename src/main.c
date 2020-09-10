@@ -65,7 +65,7 @@ void move(Toad* toad, SDL_Event e)
                 if (inBounds(toad->rect->x, toad->rect->y - 16))
                 {
                     Mix_PlayChannel(-1, toad->soundMap->sounds[HOP], 0);
-                    initTween(toad->tween, &toad->rect->y, 500, toad->rect->y, toad->rect->y - 16);
+                    initTween(toad->tween, &toad->rect->y, 200, toad->rect->y, toad->rect->y - 16);
                     setAnimation(toad->animationMap, JUMP_UP);
                 }
                 break;
@@ -74,7 +74,7 @@ void move(Toad* toad, SDL_Event e)
                 if (inBounds(toad->rect->x - 16, toad->rect->y))
                 {
                     Mix_PlayChannel(-1, toad->soundMap->sounds[HOP], 0);
-                    initTween(toad->tween, &toad->rect->x, 500, toad->rect->x, toad->rect->x - 16);
+                    initTween(toad->tween, &toad->rect->x, 200, toad->rect->x, toad->rect->x - 16);
                     setAnimation(toad->animationMap, JUMP_LEFT);
                 }
                 break;
@@ -83,7 +83,7 @@ void move(Toad* toad, SDL_Event e)
                 if (inBounds(toad->rect->x, toad->rect->y + 16))
                 {
                     Mix_PlayChannel(-1, toad->soundMap->sounds[HOP], 0);
-                    initTween(toad->tween, &toad->rect->y, 500, toad->rect->y, toad->rect->y + 16);
+                    initTween(toad->tween, &toad->rect->y, 200, toad->rect->y, toad->rect->y + 16);
                     setAnimation(toad->animationMap, JUMP_DOWN);
                 }
                 break;
@@ -92,7 +92,7 @@ void move(Toad* toad, SDL_Event e)
                 if (inBounds(toad->rect->x + 16, toad->rect->y))
                 {
                     Mix_PlayChannel(-1, toad->soundMap->sounds[HOP], 0);
-                    initTween(toad->tween, &toad->rect->x, 500, toad->rect->x, toad->rect->x + 16);
+                    initTween(toad->tween, &toad->rect->x, 200, toad->rect->x, toad->rect->x + 16);
                     setAnimation(toad->animationMap, JUMP_RIGHT);
                 }
                 break;
