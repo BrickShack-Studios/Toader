@@ -6,7 +6,7 @@
 
 #include "animationmap.h"
 #include "animation.h"
-#include "sprite.h"
+#include "entity.h"
 #include "screen.h"
 #include "soundmap.h"
 #include "tween.h"
@@ -29,9 +29,8 @@ enum ToadSound
 
 typedef struct Toad
 {
-    AnimationMap* animationMap;
+    Entity* entity;
     Tween* tween;
-    SDL_Rect* rect;
     SoundMap* soundMap;
     enum ToadSound soundState;
     enum ToadAnimation animationState;
@@ -43,20 +42,20 @@ typedef struct Toad
 Toad* newToad(SDL_Renderer* renderer);
 
 /**
-   Frees all memory taken up by the Toad struct and its members
- */
-void destroyToad(Toad* toad);
-
-/**
    Adds animations to a Toad's AnimationMap
 */
 
-void addToaderAnimation(SDL_Renderer* renderer, Toad* toad);
+void addToaderAnimation(Toad* toad, SDL_Renderer* renderer);
 
 /**
    Adds sounds to a Toad's SoundMap
 */
 
 void addToaderSound(Toad* toad);
+
+/**
+   Frees all memory taken up by the Toad struct and its members
+ */
+void destroyToad(Toad* toad);
 
 #endif

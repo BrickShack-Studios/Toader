@@ -30,7 +30,7 @@ Text* newText(SDL_Renderer* renderer, char* str, int x, int y)
     SDL_SetRenderTarget(renderer, text->texture);
     SDL_RenderClear(renderer);
 
-    SDL_Texture* charMap = loadTexture("./res/sprites/chars/characters.PNG", renderer);
+    SDL_Texture* charMap = loadTexture("./res/sprites/chars/characters.png", renderer);
     if (!charMap)
         SDL_Log("Error retrieving character sprite: %s\n", SDL_GetError());
 

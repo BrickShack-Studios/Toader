@@ -6,27 +6,28 @@
 typedef struct AnimationMap
 {
     Animation** animations;
-    int numAnimations;
-    int currentAnimation;
+    SDL_Rect* position;
+    unsigned int numAnimations;
+    unsigned int currentAnimation;
 } AnimationMap;
 
 /**
    Allocates a new AnimationMap with a provided number of animations
 */
 
-AnimationMap* newAnimationMap(int numAnimations);
+AnimationMap* newAnimationMap(unsigned int numAnimations);
 
 /**
    Sets the current animation to be played
 */
 
-void setAnimation(AnimationMap* animationMap, int animation);
+void setAnimation(AnimationMap* animationMap, unsigned int animation);
 
 /**
    Draws an Animation from an AnimationMap to the screen
 */
 
-void drawAnimationMap(AnimationMap* animationMap, SDL_Renderer* renderer, SDL_Rect* rect);
+void drawAnimationMap(AnimationMap* animationMap, SDL_Renderer* renderer);
 
 /**
    Frees all memory taken by an AnimationMap struct and its members

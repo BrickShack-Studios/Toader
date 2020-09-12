@@ -6,7 +6,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 
-#include "animation.h"
+#include "entity.h"
 #include "spritemap.h"
 #include "screen.h"
 #include "sprite.h"
@@ -62,38 +62,38 @@ void move(Toad* toad, SDL_Event e)
         {
             case SDLK_w:
             case SDLK_UP:
-                if (inBounds(toad->rect->x, toad->rect->y - 16))
+                if (inBounds(toad->entity->position->x, toad->entity->position->y - 16))
                 {
                     Mix_PlayChannel(-1, toad->soundMap->sounds[HOP], 0);
-                    initTween(toad->tween, &toad->rect->y, 500, toad->rect->y, toad->rect->y - 16);
-                    setAnimation(toad->animationMap, JUMP_UP);
+                    initTween(toad->tween, &toad->entity->position->y, 200, toad->entity->position->y, toad->entity->position->y - 16);
+                    setAnimation(toad->entity->aMap, JUMP_UP);
                 }
                 break;
             case SDLK_a:
             case SDLK_LEFT:
-                if (inBounds(toad->rect->x - 16, toad->rect->y))
+                if (inBounds(toad->entity->position->x - 16, toad->entity->position->y))
                 {
                     Mix_PlayChannel(-1, toad->soundMap->sounds[HOP], 0);
-                    initTween(toad->tween, &toad->rect->x, 500, toad->rect->x, toad->rect->x - 16);
-                    setAnimation(toad->animationMap, JUMP_LEFT);
+                    initTween(toad->tween, &toad->entity->position->x, 200, toad->entity->position->x, toad->entity->position->x - 16);
+                    setAnimation(toad->entity->aMap, JUMP_LEFT);
                 }
                 break;
             case SDLK_s:
             case SDLK_DOWN:
-                if (inBounds(toad->rect->x, toad->rect->y + 16))
+                if (inBounds(toad->entity->position->x, toad->entity->position->y + 16))
                 {
                     Mix_PlayChannel(-1, toad->soundMap->sounds[HOP], 0);
-                    initTween(toad->tween, &toad->rect->y, 500, toad->rect->y, toad->rect->y + 16);
-                    setAnimation(toad->animationMap, JUMP_DOWN);
+                    initTween(toad->tween, &toad->entity->position->y, 200, toad->entity->position->y, toad->entity->position->y + 16);
+                    setAnimation(toad->entity->aMap, JUMP_DOWN);
                 }
                 break;
             case SDLK_d:
             case SDLK_RIGHT:
-                if (inBounds(toad->rect->x + 16, toad->rect->y))
+                if (inBounds(toad->entity->position->x + 16, toad->entity->position->y))
                 {
                     Mix_PlayChannel(-1, toad->soundMap->sounds[HOP], 0);
-                    initTween(toad->tween, &toad->rect->x, 500, toad->rect->x, toad->rect->x + 16);
-                    setAnimation(toad->animationMap, JUMP_RIGHT);
+                    initTween(toad->tween, &toad->entity->position->x, 200, toad->entity->position->x, toad->entity->position->x + 16);
+                    setAnimation(toad->entity->aMap, JUMP_RIGHT);
                 }
                 break;
         }
@@ -118,7 +118,6 @@ int main(int argc, char* argv[])
 
     Text* nut = newText(screen->renderer, "nut", 6, 9);
 
-
     unsigned int frameCount = 0;
     unsigned int currentTime = SDL_GetTicks();
     unsigned int lastFrame = currentTime;
@@ -141,7 +140,7 @@ int main(int argc, char* argv[])
 
         drawSpriteMap(worldMap, screen->renderer);
 
-        drawAnimationMap(toad->animationMap, screen->renderer, toad->rect);
+        drawEntity(toad->entity, screen->renderer);
 
         drawText(nut, screen->renderer);
 

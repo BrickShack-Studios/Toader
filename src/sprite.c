@@ -40,6 +40,8 @@ Sprite* newSprite(const char* path, SDL_Renderer* renderer)
     sprite->texture = loadTexture(path, renderer);
     sprite->rect = calloc(1, sizeof(SDL_Rect));
 
+    SDL_QueryTexture(sprite->texture, NULL, NULL, &sprite->rect->w, &sprite->rect->h);
+
     return sprite;
 }
 

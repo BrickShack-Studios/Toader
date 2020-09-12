@@ -13,23 +13,24 @@ typedef struct Animation
 {
     Sprite* strip;
     SDL_Rect* currentFrame;
+    SDL_Rect* position;
     Tween* tween;
     int frameCount;
     int frame;
-    clock_t duration;
+    unsigned int duration;
 } Animation;
 
 /**
    Allocates a new Animation using the provided parameters
 */
 
-Animation* newAnimation(SDL_Renderer* renderer, const char* spriteFilePath, int frames, int height, int width, clock_t duration);
+Animation* newAnimation(SDL_Renderer* renderer, const char* spriteFilePath, int frames, int height, int width, unsigned int duration);
 
 /**
    Draws an Animation from an AnimationMap to the screen
 */
 
-void drawAnimation(Animation* animation, SDL_Renderer* renderer, SDL_Rect* rect);
+void drawAnimation(Animation* animation, SDL_Renderer* renderer);
 
 /**
    Initalizes an Animation's Tween struct
