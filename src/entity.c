@@ -4,15 +4,15 @@
 #include <SDL2/SDL.h>
 
 #include "entity.h"
-#include "sprite.h"
+#include "animationmap.h"
 
-Entity* newEntity(char* path, SDL_Renderer* renderer, unsigned int hitboxW, unsigned int hitboxH)
+Entity* newEntity(unsigned int hitboxW, unsigned int hitboxH, unsigned int numAnimations)
 {
     Entity* entity = calloc(1, sizeof(Entity));
     entity->hitbox = calloc(1, sizeof(Collider));
     
-    entity->sprite = newSprite(path, renderer);
-    entity->rect = entity->sprite->rect;
+    entity->aMap = newAnimationMap(numAnimations);
+    entity->position = entity->aMap->position;
     
     entity->hitbox->w = hitboxW;
     entity->hitbox->h = hitboxH;
@@ -24,14 +24,20 @@ Entity* newEntity(char* path, SDL_Renderer* renderer, unsigned int hitboxW, unsi
 
 void centerHitbox(Entity* entity)
 {
-    entity->hitbox->x = entity->rect->x + entity->rect->w / 4;
-    entity->hitbox->y = entity->rect->y + entity->rect->h / 4;
+    entity->hitbox->x = entity->position->x + entity->position->w / 4;
+    entity->hitbox->y = entity->position->y + entity->position->h / 4;
 
     return;
 }
 
-bool isColliding(Collider* c1, Collider* c2)
+bool isColliding(Entity* e1, Entity* e2)
 {
+    centerHitbox(e1);
+    centerHitbox(e2);
+
+    Collider* c1 = e1->hitbox;
+    Collider* c2 = e2->hitbox;
+    
     int c1LeftSide = c1->x;
     int c2LeftSide = c2->x;
 
@@ -58,22 +64,22 @@ bool isColliding(Collider* c1, Collider* c2)
 
 void drawEntity(Entity* entity, SDL_Renderer* renderer)
 {
-    drawSprite(entity->sprite, renderer);
+    drawAnimationMap(entity->aMap, renderer);
 
     return;
 }
 
 void destroyEntity(Entity* entity)
 {
-    if (entity->sprite)
+    if (entity->aMap)
     {
-        destroySprite(entity->sprite);
-        entity->sprite = NULL;
+        destroyAnimationMap(entity->aMap);
+        entity->aMap = NULL;
 
-        // The rect isn't allocated: it's just tied to the sprite's rect.
+        // The position isn't allocated: it's just tied to the animation map's position.
         // Therefore, we don't need to free it, and it'll be destroyed
-        // with the sprite
-        entity->rect = NULL;
+        // with the animation map.
+        entity->position = NULL;
     }
 
     if (entity->hitbox)
