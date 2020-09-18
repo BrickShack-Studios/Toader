@@ -7,6 +7,7 @@
 #include <SDL2/SDL_mixer.h>
 
 #include "entity.h"
+#include "entities/lilypad.h"
 #include "spritemap.h"
 #include "screen.h"
 #include "sprite.h"
@@ -122,6 +123,8 @@ int main(int argc, char* argv[])
     unsigned int currentTime = SDL_GetTicks();
     unsigned int lastFrame = currentTime;
     unsigned int lastPrint = currentTime;
+
+    Lilypad* lilypad = newLilypad(screen->renderer);
     
     while (!quit)
     {
@@ -135,13 +138,15 @@ int main(int argc, char* argv[])
         }
 
         tickTween(toad->tween);
-
+        tickLilypad(lilypad);
+        
         SDL_RenderClear(screen->renderer);
 
         drawSpriteMap(worldMap, screen->renderer);
-
+        
+        drawEntity(lilypad->entity, screen->renderer);
         drawEntity(toad->entity, screen->renderer);
-
+        
         drawText(nut, screen->renderer);
 
         SDL_RenderPresent(screen->renderer);
@@ -167,6 +172,7 @@ cleanup:
     destroyText(nut);
     cleanup(screen, toad);
     destroySpriteMap(worldMap);
+    destroyLilypad(lilypad);
 
     argv[argc - 1][0] = 0; // Does nothing except cheekily remove warnings
     return 0;

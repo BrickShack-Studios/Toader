@@ -1,8 +1,8 @@
 CC := gcc
 
 ifdef OS
-	MKDIR := md
-	RMDIR := rd /S /Q
+	MKDIR := -mkdir
+	RMDIR := -RMDIR /S /Q
 	CFLAGS := -Iinclude -Lbin -Llib -w -Wl,-subsystem,windows -Wall -Wextra -pedantic -std=c99
 	LIBS := -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer
 	EXE := ./toader.exe
@@ -15,7 +15,7 @@ else
 endif
 
 HEADERS :=
-SOURCES := $(wildcard ./src/*.c)
+SOURCES := $(wildcard ./src/*.c ./src/entities/*.c)
 
 OBJECTS := $(patsubst ./src/%.c,./obj/%.o,$(SOURCES))
 
@@ -29,8 +29,12 @@ $(EXE): $(OBJECTS) | ./binary
 ./obj/%.o: ./src/%.c | ./obj
 	$(CC) $(CFLAGS) -g -c $< -o $@
 
-./binary ./obj:
+./binary:
 	$(MKDIR) $@
+
+./obj:
+	$(MKDIR) ./obj
+	$(MKDIR) ./obj/entities
 
 release: ./src/$(SOURCES)
 	$(CC) ./src/$(SOURCES) $(CFLAGS) $(LIBS) -Ofast -o $(EXE)
