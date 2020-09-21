@@ -16,6 +16,7 @@ Toad* newToad(SDL_Renderer* renderer)
     
     toad->entity = newEntity(5, 5, 4);
     toad->tween = newTween();
+    toad->tween2 = newTween();
     toad->soundMap = newSoundMap(4);
 
     addToaderSound(toad);
@@ -47,6 +48,8 @@ void destroyToad(Toad* toad)
 {
     if (toad->tween)
         destroyTween(toad->tween);
+    if (toad->tween2)
+        destroyTween(toad->tween2);
     if (toad->soundMap)
         destroySoundMap(toad->soundMap);
     if (toad->entity)
@@ -55,6 +58,7 @@ void destroyToad(Toad* toad)
     toad->entity = NULL;
     toad->soundMap = NULL;
     toad->tween = NULL;
+    toad->tween2 = NULL;
     
     free(toad);
     return;

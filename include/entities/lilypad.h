@@ -6,10 +6,13 @@
 #include "entity.h"
 #include "tween.h"
 
+#include "behaviors/toadstick.h"
+
 typedef struct Lilypad
 {
     Entity* entity;
     Tween* tween;
+    ToadStick* toadStick;
 } Lilypad;
 
 Lilypad* newLilypad(SDL_Renderer* renderer);

@@ -7,13 +7,16 @@
 #include <SDL2/SDL_mixer.h>
 
 #include "entity.h"
-#include "entities/lilypad.h"
 #include "spritemap.h"
 #include "screen.h"
 #include "sprite.h"
 #include "toader.h"
 #include "tween.h"
 #include "text.h"
+
+#include "entities/lilypad.h"
+
+#include "behaviors/toadstick.h"
 
 const unsigned int MILLISECONDS_PER_FRAME = 1000 / 60;
 
@@ -57,6 +60,9 @@ void move(Toad* toad, SDL_Event e)
     if (toad->tween->isActive)
         return;
 
+    int nearestX = (int)((float)toad->entity->position->x / 16.0f + 0.5f) * 16;
+    int nearestY = (int)((float)toad->entity->position->y / 16.0f + 0.5f) * 16;
+
     if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
     {
         switch (e.key.keysym.sym)
@@ -66,7 +72,8 @@ void move(Toad* toad, SDL_Event e)
                 if (inBounds(toad->entity->position->x, toad->entity->position->y - 16))
                 {
                     Mix_PlayChannel(-1, toad->soundMap->sounds[HOP], 0);
-                    initTween(toad->tween, &toad->entity->position->y, 200, toad->entity->position->y, toad->entity->position->y - 16);
+                    initTween(toad->tween, &toad->entity->position->y, 200, toad->entity->position->y, nearestY - 16);
+                    initTween(toad->tween2, &toad->entity->position->x, 200, toad->entity->position->x, nearestX);
                     setAnimation(toad->entity->aMap, JUMP_UP);
                 }
                 break;
@@ -75,7 +82,8 @@ void move(Toad* toad, SDL_Event e)
                 if (inBounds(toad->entity->position->x - 16, toad->entity->position->y))
                 {
                     Mix_PlayChannel(-1, toad->soundMap->sounds[HOP], 0);
-                    initTween(toad->tween, &toad->entity->position->x, 200, toad->entity->position->x, toad->entity->position->x - 16);
+                    initTween(toad->tween, &toad->entity->position->x, 200, toad->entity->position->x, nearestX - 16);
+                    initTween(toad->tween2, &toad->entity->position->y, 200, toad->entity->position->y, nearestY);
                     setAnimation(toad->entity->aMap, JUMP_LEFT);
                 }
                 break;
@@ -84,16 +92,18 @@ void move(Toad* toad, SDL_Event e)
                 if (inBounds(toad->entity->position->x, toad->entity->position->y + 16))
                 {
                     Mix_PlayChannel(-1, toad->soundMap->sounds[HOP], 0);
-                    initTween(toad->tween, &toad->entity->position->y, 200, toad->entity->position->y, toad->entity->position->y + 16);
+                    initTween(toad->tween, &toad->entity->position->y, 200, toad->entity->position->y, nearestY + 16);
+                    initTween(toad->tween2, &toad->entity->position->x, 200, toad->entity->position->x, nearestX);
                     setAnimation(toad->entity->aMap, JUMP_DOWN);
                 }
                 break;
             case SDLK_d:
             case SDLK_RIGHT:
                 if (inBounds(toad->entity->position->x + 16, toad->entity->position->y))
-                {
+                { 
                     Mix_PlayChannel(-1, toad->soundMap->sounds[HOP], 0);
-                    initTween(toad->tween, &toad->entity->position->x, 200, toad->entity->position->x, toad->entity->position->x + 16);
+                    initTween(toad->tween, &toad->entity->position->x, 200, toad->entity->position->x, nearestX + 16);
+                    initTween(toad->tween2, &toad->entity->position->y, 200, toad->entity->position->y, nearestY);
                     setAnimation(toad->entity->aMap, JUMP_RIGHT);
                 }
                 break;
@@ -125,6 +135,10 @@ int main(int argc, char* argv[])
     unsigned int lastPrint = currentTime;
 
     Lilypad* lilypad = newLilypad(screen->renderer);
+
+    const unsigned int numToadSticks = 1;
+    ToadStick** toadSticks = calloc(numToadSticks, sizeof(ToadStick*));
+    toadSticks[0] = lilypad->toadStick;
     
     while (!quit)
     {
@@ -138,7 +152,39 @@ int main(int argc, char* argv[])
         }
 
         tickTween(toad->tween);
+        tickTween(toad->tween2);
         tickLilypad(lilypad);
+
+        unsigned int i;
+        bool touchedToadStick = false;
+        centerHitbox(toad->entity);
+        for (i = 0; i < numToadSticks; i++)
+        {
+            //SDL_Log("ToadStick at (%i, %i)\nToader at (%i, %i)\n\n", toadSticks[i]->hitbox->x, toadSticks[i]->hitbox->y, toad->entity->hitbox->x, toad->entity->hitbox->y);
+            if (isColliding_c(toadSticks[i]->hitbox, toad->entity->hitbox))
+            {
+                //SDL_Log("Collision!\n");
+                touchedToadStick = true;
+                if (toadSticks[i] != toad->toadStick)
+                {
+                    if (toad->toadStick)
+                        toad->toadStick->toad = NULL;
+                    
+                    toad->toadStick = toadSticks[i];
+                    toad->toadStick->toad = toad;
+                }
+
+                break;
+            }
+        }
+
+        if (touchedToadStick)
+            tickToadStick(toad->toadStick);
+        else if (toad->toadStick)
+        {
+            toad->toadStick->toad = NULL;
+            toad->toadStick = NULL;
+        }
         
         SDL_RenderClear(screen->renderer);
 

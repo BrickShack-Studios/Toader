@@ -15,7 +15,7 @@ else
 endif
 
 HEADERS :=
-SOURCES := $(wildcard ./src/*.c ./src/entities/*.c)
+SOURCES := $(wildcard ./src/*.c ./src/entities/*.c ./src/behaviors/*.c)
 
 OBJECTS := $(patsubst ./src/%.c,./obj/%.o,$(SOURCES))
 
@@ -35,6 +35,7 @@ $(EXE): $(OBJECTS) | ./binary
 ./obj:
 	$(MKDIR) ./obj
 	$(MKDIR) ./obj/entities
+	$(MKDIR) ./obj/behaviors
 
 release: ./src/$(SOURCES)
 	$(CC) ./src/$(SOURCES) $(CFLAGS) $(LIBS) -Ofast -o $(EXE)

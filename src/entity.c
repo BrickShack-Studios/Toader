@@ -38,6 +38,11 @@ bool isColliding(Entity* e1, Entity* e2)
     Collider* c1 = e1->hitbox;
     Collider* c2 = e2->hitbox;
     
+    return isColliding_c(c1, c2);
+}
+
+bool isColliding_c(Collider* c1, Collider* c2)
+{
     int c1LeftSide = c1->x;
     int c2LeftSide = c2->x;
 
@@ -49,6 +54,8 @@ bool isColliding(Entity* e1, Entity* e2)
 
     int c1BottomSide = c1TopSide + c1->h;
     int c2BottomSide = c2TopSide + c2->h;
+
+    //SDL_Log("C1 has sides (%i, %i, %i, %i)\nC2 has sides (%i, %i, %i, %i)\n\n", c1LeftSide, c1RightSide, c1TopSide, c1BottomSide, c2LeftSide, c2RightSide, c2TopSide, c2BottomSide);
 
     if (c1LeftSide >= c2RightSide)
         return false;

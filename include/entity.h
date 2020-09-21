@@ -35,6 +35,12 @@ void centerHitbox(Entity* entity);
 bool isColliding(Entity* e1, Entity* e2);
 
 /**
+   Checks if two `Collider`s are overlapping.
+   \return True if there's overlap, false otherwise
+ */
+bool isColliding_c(Collider* c1, Collider* c2);
+
+/**
    A wrapper function for the animation map's draw function.
  */
 void drawEntity(Entity* entity, SDL_Renderer* renderer);
