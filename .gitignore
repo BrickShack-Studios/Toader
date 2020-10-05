@@ -4,3 +4,8 @@
 /toader
 /obj/
 /binary/
+/CMakeFiles/
+/CMakeCache.txt
+/Toader
+/cmake_install.cmake
+Makefile
