@@ -10,6 +10,7 @@
 #include "screen.h"
 #include "soundmap.h"
 #include "tween.h"
+#include "behaviors/toadstick.h"
 
 enum ToadAnimation
 {
@@ -31,7 +32,9 @@ typedef struct Toad
 {
     Entity* entity;
     Tween* tween;
+    Tween* tween2;
     SoundMap* soundMap;
+    struct ToadStick* toadStick;
     enum ToadSound soundState;
     enum ToadAnimation animationState;
 } Toad;

@@ -19,7 +19,7 @@ typedef struct Tween
    Allocates a new Tween struct
 */
 
-Tween *newTween();
+Tween* newTween();
 
 /**
    Initializes a passed Tween struct with the parameters provided
