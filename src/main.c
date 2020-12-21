@@ -115,14 +115,15 @@ void move(Toad* toad, SDL_Event e)
 int main(int argc, char* argv[])
 {
     Screen* screen = init();
-    SpriteMap* worldMap = createWorldMap(screen->renderer);
-    Toad* toad = newToad(screen->renderer);
 
     if (!screen)
     {
         SDL_Log("Failed to initialize\n");
         goto cleanup;
     }
+    
+    SpriteMap* worldMap = createWorldMap(screen->renderer);
+    Toad* toad = newToad(screen->renderer);
 
     bool quit = false;
     SDL_Event e;
@@ -203,7 +204,6 @@ int main(int argc, char* argv[])
         if (currentTime - lastFrame < MILLISECONDS_PER_FRAME)
             SDL_Delay(MILLISECONDS_PER_FRAME - (currentTime - lastFrame));
         
-        lastFrame = currentTime;
         if (currentTime - lastPrint >= 1000)
         {
             SDL_Log("FPS: %u\n", frameCount);
