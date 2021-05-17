@@ -66,11 +66,13 @@ Sprite* charToSprite(char c, SDL_Renderer* renderer)
 SpriteMap* newSpriteMapFromArray(const char** arr, int arrWidth, int arrHeight, int tileWidth, int tileHeight, SDL_Renderer* renderer)
 {
     SpriteMap* spriteMap = newSpriteMap(arrWidth, arrHeight, tileWidth, tileHeight);
+    spriteMap->charTile = arr;
 
     int x, y;
-    for (y = 0; y < arrHeight; y++)
+    for (y = 0; y < arrHeight; y++) 
+    {
         for (x = 0; x < arrWidth; x++)
-        {
+        { 
             spriteMap->tile[y][x] = charToSprite(arr[y][x], renderer);
             if (spriteMap->tile[y][x])
             {
@@ -80,6 +82,7 @@ SpriteMap* newSpriteMapFromArray(const char** arr, int arrWidth, int arrHeight, 
                 spriteMap->tile[y][x]->rect->y = y * tileHeight;
             }
         }
+    }
 
     return spriteMap;
 }

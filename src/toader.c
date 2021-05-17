@@ -18,6 +18,7 @@ Toad* newToad(SDL_Renderer* renderer)
     toad->tween = newTween();
     toad->tween2 = newTween();
     toad->soundMap = newSoundMap(4);
+    toad->lives = 3;
 
     addToaderSound(toad);
     addToaderAnimation(toad, renderer);
@@ -39,7 +40,7 @@ void addToaderSound(Toad* toad)
 {
     toad->soundMap->sounds[0] = Mix_LoadWAV("./res/sound/hop.wav");
     toad->soundMap->sounds[1] = Mix_LoadWAV("./res/sound/lifeup.wav");
-    toad->soundMap->sounds[2] = Mix_LoadWAV("./res/sound/splat.wav");
+    toad->soundMap->sounds[2] = Mix_LoadWAV("./res/sound/squash.wav");
     toad->soundMap->sounds[3] = Mix_LoadWAV("./res/sound/splash.wav");
     return;
 }

@@ -15,10 +15,19 @@ typedef struct Lilypad
     ToadStick* toadStick;
 } Lilypad;
 
+/**
+   Allocates a new Lilypad struct using the renderer provided by the Screen.
+ */
 Lilypad* newLilypad(SDL_Renderer* renderer);
 
+/**
+   Performs a tween of the given Lilypad and centers its hitbox.
+*/
 void tickLilypad(Lilypad* lilypad);
 
+/**
+   Frees all memory taken up by the Lilypad struct and its members.
+ */
 void destroyLilypad(Lilypad* lilypad);
 
 #endif

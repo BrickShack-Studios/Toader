@@ -30,13 +30,13 @@ void centerHitbox(Entity* entity);
 
 /**
    Checks if two entities' hitboxes are overlapping.
-   \return True if there's overlap between hitboxes, false otherwise
+   \return True if there's overlap between hitboxes, false otherwise.
  */
 bool isColliding(Entity* e1, Entity* e2);
 
 /**
    Checks if two `Collider`s are overlapping.
-   \return True if there's overlap, false otherwise
+   \return True if there's overlap, false otherwise.
  */
 bool isColliding_c(Collider* c1, Collider* c2);
 

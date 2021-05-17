@@ -14,10 +14,17 @@ typedef struct ToadStick
     bool latched;
 } ToadStick;
 
+
+/**
+   Allocates a new Toad Stick struct using the parameters provided.
+ */
 ToadStick* newToadStick(int x, int y, int w, int h);
 
 void tickToadStick(ToadStick* ts);
 
+/**
+   Frees all memory taken up by the Toad Stick struct and its members.
+ */
 void destroyToadStick(ToadStick* ts);
 
 #endif

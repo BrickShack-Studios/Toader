@@ -24,7 +24,7 @@ enum ToadSound
 {
     HOP,
     LIFEUP,
-    SPLAT,
+    SQUASH,
     SPLASH
 };
 
@@ -37,6 +37,7 @@ typedef struct Toad
     struct ToadStick* toadStick;
     enum ToadSound soundState;
     enum ToadAnimation animationState;
+    int lives;
 } Toad;
 
 /**

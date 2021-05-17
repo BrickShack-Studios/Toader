@@ -11,6 +11,7 @@ typedef struct SpriteMap
 {
     Sprite*** tile;
     SDL_Rect* rect;
+    char** charTile;
     int height;
     int width;
     int tileHeight;

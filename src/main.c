@@ -15,8 +15,10 @@
 #include "text.h"
 
 #include "entities/lilypad.h"
+#include "entities/truck.h"
 
 #include "behaviors/toadstick.h"
+#include "behaviors/toadhurt.h"
 
 const unsigned int MILLISECONDS_PER_FRAME = 1000 / 60;
 
@@ -137,9 +139,15 @@ int main(int argc, char* argv[])
 
     Lilypad* lilypad = newLilypad(screen->renderer);
 
+    int t;
+    int numTrucks = 1;
+    Truck* truck = newTruck(screen->renderer);
+
     const unsigned int numToadSticks = 1;
     ToadStick** toadSticks = calloc(numToadSticks, sizeof(ToadStick*));
     toadSticks[0] = lilypad->toadStick;
+
+    ToadHurt* toadHurt = newToadHurt(toad);
     
     while (!quit)
     {
@@ -155,6 +163,7 @@ int main(int argc, char* argv[])
         tickTween(toad->tween);
         tickTween(toad->tween2);
         tickLilypad(lilypad);
+        tickTruck(truck);
 
         unsigned int i;
         bool touchedToadStick = false;
@@ -186,11 +195,24 @@ int main(int argc, char* argv[])
             toad->toadStick->toad = NULL;
             toad->toadStick = NULL;
         }
+
+        if (isColliding_c(truck->entity->hitbox, toad->entity->hitbox))
+        {
+            Mix_PlayChannel(-1, toad->soundMap->sounds[SQUASH], 0);
+            tickToadHurt(toadHurt);
+        }
+
+        if (worldMap->charTile[toad->entity->position->y / 16][toad->entity->position->x / 16] == ' ' && !touchedToadStick && !toad->tween->isActive)
+        {
+            Mix_PlayChannel(-1, toad->soundMap->sounds[SPLASH], 0);
+            tickToadHurt(toadHurt);
+        }
         
         SDL_RenderClear(screen->renderer);
 
         drawSpriteMap(worldMap, screen->renderer);
-        
+
+        drawEntity(truck->entity, screen->renderer);
         drawEntity(lilypad->entity, screen->renderer);
         drawEntity(toad->entity, screen->renderer);
         
@@ -219,6 +241,8 @@ cleanup:
     cleanup(screen, toad);
     destroySpriteMap(worldMap);
     destroyLilypad(lilypad);
+    destroyTruck(truck);
+    
 
     argv[argc - 1][0] = 0; // Does nothing except cheekily remove warnings
     return 0;
